@@ -1,0 +1,19 @@
+# Intelij ignores
+.idea/
+*.iml
+
+# Build ignores
+target/
+
+# OSX ignores
+.DS_Store
+
+# Shade ignores
+dependency-*
+
+# Eclipse ignores
+.classpath
+.project
+.settings
+# eclipse test-ng plugin creates this directory
+test-output
