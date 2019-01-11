@@ -5,12 +5,19 @@ package com.erwolff.data;
  */
 public class LiveDrive {
 
+    private DriveType type;
     private long timestamp;
 
     public LiveDrive() {
     }
 
     public LiveDrive(long timestamp) {
+        this.type = DriveType.LIVE;
+        this.timestamp = timestamp;
+    }
+
+    public LiveDrive(DriveType type, long timestamp) {
+        this.type = type;
         this.timestamp = timestamp;
     }
 
@@ -20,5 +27,13 @@ public class LiveDrive {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public DriveType getType() {
+        return type;
+    }
+
+    public void setType(DriveType type) {
+        this.type = type;
     }
 }

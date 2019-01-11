@@ -3,14 +3,15 @@ package com.erwolff.pagination;
 import java.util.function.Function;
 
 import com.google.common.collect.Iterators;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.*;
 
 /**
  * Provides helper utilities for paging results from the DB
  */
 public class Pager {
+    private static final Logger log = LoggerFactory.getLogger(Pager.class.getSimpleName());
 
     static final String DEFAULT_SORT_FIELD = "timestamp";
     static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.DESC;
@@ -28,8 +29,10 @@ public class Pager {
      */
     public <LIVE, ARCHIVED, RESULT> Page<RESULT> pageAndMerge(Function<Pageable, Page<LIVE>> liveQuery, Function<LIVE, RESULT> liveMappingFunction, Function<Pageable, Page<ARCHIVED>> archivedQuery, Function<ARCHIVED, RESULT> archivedMappingFunction, Pageable pageable) {
         if (pageable.getPageSize() <= 0) {
-            // Let's assume that we have exception handling which maps these Runtime Exceptions into HttpStatus 400s
-            throw new RuntimeException("Page size must be greater than 0");
+            String message = "Page size must be greater than 0";
+            log.error(message);
+            // Let's assume that we have exception handling which maps these IllegalArgumentExceptions into HttpStatus 400s
+            throw new IllegalArgumentException(message);
         }
 
         //TODO: What are some other error cases we should handle?

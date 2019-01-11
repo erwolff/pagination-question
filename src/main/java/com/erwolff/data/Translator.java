@@ -12,14 +12,7 @@ public class Translator {
             return Optional.empty();
         }
 
-        return Optional.of(new LiveDrive(archivedDrive.getTimestamp()));
-    }
-
-    public static Optional<ArchivedDrive> translate(LiveDrive liveDrive) {
-        if (liveDrive == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(new ArchivedDrive(liveDrive.getTimestamp()));
+        // create a new LiveDrive with type ARCHIVED - to represent that this was translated (for verification purposes)
+        return Optional.of(new LiveDrive(DriveType.ARCHIVED, archivedDrive.getTimestamp()));
     }
 }
