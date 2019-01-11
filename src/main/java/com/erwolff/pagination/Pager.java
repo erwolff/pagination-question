@@ -25,7 +25,7 @@ public class Pager {
      * @param liveMappingFunction - the function which maps live collection results to the RESULT object
      * @param archivedMappingFunction - the function which maps archived collection results to the RESULT object
      * @param pageable - the page request
-     * @return
+     * @return - an org.springframework.data.Page of type RESULT
      */
     public <LIVE, ARCHIVED, RESULT> Page<RESULT> pageAndMerge(Function<Pageable, Page<LIVE>> liveQuery, Function<LIVE, RESULT> liveMappingFunction, Function<Pageable, Page<ARCHIVED>> archivedQuery, Function<ARCHIVED, RESULT> archivedMappingFunction, Pageable pageable) {
         if (pageable.getPageSize() <= 0) {
@@ -81,7 +81,7 @@ public class Pager {
      * @param totalElements - the combined total number of elements from both queries
      * @param pageable - the page request
      * @param sort - the sort field and direction
-     * @return
+     * @return - an org.springframework.data.Page of type RESULT
      */
     private <RESULT, INITIAL, SECONDARY> Page<RESULT> pageAndMerge(Page<INITIAL> initialResults, Function<INITIAL, RESULT> initialMappingFunction, Page<SECONDARY> secondaryResults,
                                                                           Function<Pageable, Page<SECONDARY>> secondaryQuery, Function<SECONDARY, RESULT> secondaryMappingFunction,
@@ -105,7 +105,7 @@ public class Pager {
 
     /**
      * Determines whether the supplied Page has a full set of results
-     * @param page
+     * @param page - the supplied page
      * @return true IFF the supplied page has a full set of results
      */
     private boolean isFullPage(Page<?> page) {

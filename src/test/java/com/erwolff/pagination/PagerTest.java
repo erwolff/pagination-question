@@ -28,7 +28,11 @@ public class PagerTest {
     private List<LiveDrive> liveDrives;
     private List<ArchivedDrive> archivedDrives;
 
-    @Test (expectedExceptions = IllegalArgumentException.class)
+    /**
+     * Verifies that a pageSize of zero is rejected with an IllegalArgumentException
+     */
+    @Test (description = "Verifies that a pageSize of zero is rejected with an IllegalArgumentException",
+            expectedExceptions = IllegalArgumentException.class)
     public void test_pageAndMerge_pageSizeZero() {
         // mock this because otherwise we can't construct this class with page size 0
         PageRequest pageRequest = mock(PageRequest.class);
@@ -44,7 +48,8 @@ public class PagerTest {
                 pageRequest);
     }
 
-    @Test (expectedExceptions = IllegalArgumentException.class)
+    @Test (description = "Verifies that a negative page number is rejected with an IllegalArgumentException",
+            expectedExceptions = IllegalArgumentException.class)
     public void test_pageAndMerge_pageNumberNegative() {
         // mock this because otherwise we can't construct this class with page size 0
         PageRequest pageRequest = mock(PageRequest.class);
@@ -61,7 +66,7 @@ public class PagerTest {
                 pageRequest);
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with a DESC sort with ONLY live drives")
     public void test_pageAndMerge_descSort_noArchivedDrives() {
         // pageSize of 5, only 3 live drives, and 0 archived drives
         PageRequest pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "timestamp");
@@ -80,7 +85,7 @@ public class PagerTest {
         verifyAllLive(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with an ASC sort with ONLY live drives")
     public void test_pageAndMerge_ascSort_noArchivedDrives() {
         // pageSize of 5, only 3 live drives, and 0 archived drives
         PageRequest pageRequest = new PageRequest(0, 5, Sort.Direction.ASC, "timestamp");
@@ -99,7 +104,7 @@ public class PagerTest {
         verifyAllLive(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with a DESC sort with ONLY archived drives")
     public void test_pageAndMerge_descSort_noLiveDrives() {
         // pageSize of 5, only 3 archived drives, and 0 live drives
         PageRequest pageRequest = new PageRequest(0, 5, Sort.Direction.DESC, "timestamp");
@@ -118,7 +123,7 @@ public class PagerTest {
         verifyAllArchived(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with an ASC sort with ONLY archived drives")
     public void test_pageAndMerge_ascSort_noLiveDrives() {
         // pageSize of 5, only 3 archived drives, and 0 live drives
         PageRequest pageRequest = new PageRequest(0, 5, Sort.Direction.ASC, "timestamp");
@@ -137,7 +142,7 @@ public class PagerTest {
         verifyAllArchived(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with a DESC sort with 8 live drives, 8 archived drives, and a pageSize of 6")
     public void test_pageAndMerge_descSort_liveAndArchivedDrives() {
         // pageSize of 6, 8 live drives, 8 archived drives
         PageRequest pageRequest = new PageRequest(0, 6, Sort.Direction.DESC, "timestamp");
@@ -194,7 +199,7 @@ public class PagerTest {
         verifyAllArchived(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with an ASC sort with 8 live drives, 8 archived drives, and a pageSize of 6")
     public void test_pageAndMerge_ascSort_liveAndArchivedDrives() {
         // pageSize of 6, 8 live drives, 8 archived drives
         PageRequest pageRequest = new PageRequest(0, 6, Sort.Direction.ASC, "timestamp");
@@ -251,7 +256,7 @@ public class PagerTest {
         verifyAllLive(results.getContent());
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with a DESC sort with a random amount of live and archived drives, and a random pageSize")
     public void test_pageAndMerge_descSort_randomData() {
         int pageSize = Math.abs(random.nextInt(20) + 1);
         log.debug("pageSize: {}", pageSize);
@@ -315,7 +320,7 @@ public class PagerTest {
         }
     }
 
-    @Test
+    @Test (description = "Verifies the correct elements are returned with an ASC sort with a random amount of live and archived drives, and a random pageSize")
     public void test_pageAndMerge_ascSort_randomData() {
         int pageSize = Math.abs(random.nextInt(20) + 1);
         log.debug("pageSize: {}", pageSize);

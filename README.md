@@ -29,7 +29,11 @@ The exercise revolves around the principles of pagination. There are many useful
 
  **It's up to our server to supply the correct results based on the page and sort requested**.
 
- For simplicity's sake, we'll skip all of the communication aspects (REST endpoints, data models, etc). We'll just tackle the algorithm that our server needs to implement in order to paginate over two separate collections while maintaining a sort.
+ For simplicity's sake, we'll skip all of the external aspects (REST endpoints, DAO layer, etc). We'll just tackle the algorithm that our server needs to implement in order to paginate over two separate collections while maintaining a sort.
+ 
+ _Why Generics?_
+ 
+ We'd like to use Java Generics because this isn't the only type of data that we're planning on storing a Live version and an Archived version of. We want to be able to use this same function for any time we'd like to iterate over two collections, no matter the type of data in those collections.
 
  Oh, and one more thing: a `LiveDrive` object, is not the same as an `ArchivedDrive` object. Our Web UI only knows how to handle `LiveDrive` objects. Therefore, we'll need this function to be able to map results to the required object type. We'll add this as a parameter to the function so it's up to the caller to specify HOW to do the mapping - but we can't forget to actually perform the mapping!  
 
