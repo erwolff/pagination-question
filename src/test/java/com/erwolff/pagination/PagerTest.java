@@ -23,8 +23,8 @@ import static org.mockito.Mockito.mock;
 public class PagerTest {
     private static final Logger log = LoggerFactory.getLogger(PagerTest.class.getSimpleName());
 
-    private Pager pager = new Pager();
-    private Random random = new Random();
+    private final Pager pager = new Pager();
+    private final Random random = new Random();
     private List<LiveDrive> liveDrives;
     private List<ArchivedDrive> archivedDrives;
 
@@ -277,6 +277,9 @@ public class PagerTest {
         if (totalDrives != 0) {
             assertThat(results.hasContent()).isTrue();
         }
+
+        int totalFoundDrives = results.getNumberOfElements();
+
         if (totalDrives >= pageSize) {
             assertThat(results.getNumberOfElements()).isEqualTo(pageSize);
         }
@@ -284,7 +287,7 @@ public class PagerTest {
             assertThat(results.hasNext()).isTrue();
         }
 
-        int splitElement = numLiveDrives >= pageSize ? pageSize : numLiveDrives;
+        int splitElement = Math.min(numLiveDrives, pageSize);
         List<LiveDrive> liveResults = results.getContent().subList(0, splitElement);
         verifyAllLive(liveResults);
         verifyOrder(liveResults, Sort.Direction.DESC);
@@ -317,7 +320,10 @@ public class PagerTest {
             archivedResults = liveResults.size() >= pageSize ? new ArrayList<>() : results.getContent().subList(splitElement, results.getContent().size());
             verifyAllArchived(archivedResults);
             verifyOrder(archivedResults, Sort.Direction.DESC);
+            totalFoundDrives += results.getNumberOfElements();
         }
+
+        assertThat(totalFoundDrives).isEqualTo(numLiveDrives + numArchivedDrives);
     }
 
     @Test (description = "Verifies the correct elements are returned with an ASC sort with a random amount of live and archived drives, and a random pageSize")
@@ -338,9 +344,12 @@ public class PagerTest {
                 pageRequest);
 
         assertThat(results).isNotNull();
+
         if (totalDrives != 0) {
             assertThat(results.hasContent()).isTrue();
         }
+        int totalFoundDrives = results.getNumberOfElements();
+
         if (totalDrives >= pageSize) {
             assertThat(results.getNumberOfElements()).isEqualTo(pageSize);
         }
@@ -348,7 +357,7 @@ public class PagerTest {
             assertThat(results.hasNext()).isTrue();
         }
 
-        int splitElement = numArchivedDrives >= pageSize ? pageSize : numArchivedDrives;
+        int splitElement = Math.min(numArchivedDrives, pageSize);
         List<LiveDrive> archivedResults = results.getContent().subList(0, splitElement);
         verifyAllArchived(archivedResults);
         verifyOrder(archivedResults, Sort.Direction.ASC);
@@ -381,10 +390,14 @@ public class PagerTest {
             liveResults = archivedResults.size() >= pageSize ? new ArrayList<>() : results.getContent().subList(splitElement, results.getContent().size());
             verifyAllLive(liveResults);
             verifyOrder(liveResults, Sort.Direction.ASC);
+
+            totalFoundDrives += results.getNumberOfElements();
         }
+
+        assertThat(totalFoundDrives).isEqualTo(numLiveDrives + numArchivedDrives);
     }
 
-    private Function<Pageable, Page<LiveDrive>> liveQuery = new Function<Pageable, Page<LiveDrive>>() {
+    private final Function<Pageable, Page<LiveDrive>> liveQuery = new Function<Pageable, Page<LiveDrive>>() {
         @Override
         public Page<LiveDrive> apply(Pageable pageable) {
             int startingElement = pageable.getPageNumber() == 0 ? 0 : (pageable.getPageNumber() * pageable.getPageSize());
@@ -400,7 +413,7 @@ public class PagerTest {
         }
     };
 
-    private Function<Pageable, Page<ArchivedDrive>> archivedQuery = new Function<Pageable, Page<ArchivedDrive>>() {
+    private final Function<Pageable, Page<ArchivedDrive>> archivedQuery = new Function<Pageable, Page<ArchivedDrive>>() {
         @Override
         public Page<ArchivedDrive> apply(Pageable pageable) {
             int startingElement = pageable.getPageNumber() == 0 ? 0 : (pageable.getPageNumber() * pageable.getPageSize());

@@ -37,6 +37,16 @@ The exercise revolves around the principles of pagination. There are many useful
 
  Oh, and one more thing: a `LiveDrive` object, is not the same as an `ArchivedDrive` object. Our Web UI only knows how to handle `LiveDrive` objects. Therefore, we'll need this function to be able to map results to the required object type. We'll add this as a parameter to the function so it's up to the caller to specify HOW to do the mapping - but we can't forget to actually perform the mapping!  
 
+## Important Assumptions
+
+**Assumption**: For this exercise, the sort field will always be `timestamp`. Assume that this means DESC sort must always return LIVE results first (and vice-versa for ASC sort)
+
+**Assumption**: The database itself is on a server that is hosted elsewhere - therefore in terms of efficiency for this exercise: fewer queries is better than smaller queries
+
+**Assumption**: The mapping process can be considered "expensive" - the fewer mapped elements the better
+
+**Assumption**: While there are other pagination libraries, we must use this one - down to the specific version. Do not adjust the libraries in the pom.xml (though you may add other libraries as you see fit)   
+
  ## Example
 
  Let's demonstrate an example of what we're looking for in terms of inputs and outputs for this function.
@@ -55,7 +65,7 @@ The exercise revolves around the principles of pagination. There are many useful
  **Page 2**: LIVE results: [27,26,25,24,23,22]  
  **Page 3**: LIVE results: [21,20]  ARCHIVED results: [19,18,17,16]
 
- _Note: In this case, the live results did not contain enough elements to fill the requested page size. Therefore we needed to supplement the page with archived results. Remember in this case that the archived results need to be mapped to the same object type as the live results - this was supplied as an argument, so just perform the mapping!_
+ _Note: In this case, the live results did not contain enough elements to fill the requested page size. Therefore, we needed to supplement the page with archived results. Remember in this case that the archived results need to be mapped to the same object type as the live results - this was supplied as an argument, so just perform the mapping!_
 
 **Page 4**: ARCHIVED results: [15,14,13,12,11,10]  
 **Page 5**: ARCHIVED results: [9,8,7,6,5,4]  
@@ -68,4 +78,5 @@ _Note: This last page isn't a full page, but we ran out of results so that's fin
 
 1. Complete the `Pager` class
 2. Verify that all tests pass in the `PagerTest` class (without altering the tests)
-3. Enjoy :)
+3. Bonus: Attempt to perform the fewest queries, with the minimum number of elements returned from the db, and the minimum number of mapped elements 
+4. Enjoy :)

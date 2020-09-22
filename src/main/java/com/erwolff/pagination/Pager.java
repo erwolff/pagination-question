@@ -37,12 +37,15 @@ public class Pager {
 
         //TODO: What are some other error cases we should handle?
 
-        // Here's some initial help to get the ball rolling. We're going to perform the queries against the two
+        // Note: feel free to change any of the below (including the params passed to the private function), there are definitely better ways of doing this
+
+
+        // Here's some initial help to get the ball rolling. This is by no means the best way to do this, but
+        // it should help provide some basic direction. We're going to perform the queries against the two
         // collections, then we'll calculate the total elements that were returned, determine the sort that was supplied,
         // and call a helper function which will perform the complex logic. We're doing these steps first so that the
         // helper function doesn't need to know the difference between archived vs live, and instead can just perform its logic
         // agnostic of that concept
-
 
         // perform both queries in order to be able to calculate the total number of results between collections
         Page<LIVE> liveResults = liveQuery.apply(pageable);
@@ -52,12 +55,7 @@ public class Pager {
         long totalElements = liveResults.getTotalElements() + archivedResults.getTotalElements();
 
         // determine the sort requested (we're only going to worry about a single sort - multiple sorting is too complex for this exercise)
-        Sort.Order sort = Iterators.get(pageable.getSort().iterator(), 0);
-
-        if (sort == null) {
-            // a sort was not supplied, we'll use our default sort
-            sort = DEFAULT_SORT;
-        }
+        Sort.Order sort = Iterators.get(pageable.getSort().iterator(), 0, DEFAULT_SORT);
 
         if (Sort.Direction.ASC == sort.getDirection()) {
             // sort is ASC: archivedResults are initial, liveResults are secondary
